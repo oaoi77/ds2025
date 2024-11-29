@@ -1,18 +1,19 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <unistd/h>
+#include <string.h>
+#include <unistd.h>
 #include <arpa/inet.h>
 
-#define SERVER_IP "127.0.0.1" //localhost
+#define SERVER_IP "172.23.147.113" 
 #define SERVER_PORT 8080
 #define BUFFER_SIZE 1024
 
-void send_file(FILE *fp, int server_socket){
+void send_file(FILE *fp, int client_socket){
     int n;
     char buffer[BUFFER_SIZE];
     while(fgets(buffer, BUFFER_SIZE, fp) != NULL){
-        if(send(server_socket, buffer, sizeof(buffer), 0) == -1){
-            perror("[-] Sending file failed")
+        if(send(client_socket, buffer, sizeof(buffer), 0) == -1){
+            perror("[-] Sending file failed");
             exit(EXIT_FAILURE);
         }
         bzero(buffer, BUFFER_SIZE);
@@ -44,13 +45,18 @@ int main(){
         close(client_socket);
         exit(EXIT_FAILURE);
     }
-    printf("[+] Connect successfully\n")
+    printf("[+] Connect successfully\n");
 
     //read the file then send file data to server
     fp = fopen(filename, "r");
     if(fp == NULL){
         perror("[-] Reading file failed");
         close(client_socket);
-        exit(EXIT_VALUE);
+        exit(EXIT_FAILURE);
     }
+
+    //send file data and close socket
+    send_file(fp, client_socket);
+    printf("[+] File data sent sucessfully\n");
+    close(client_socket);
 }
