@@ -30,5 +30,33 @@ void recv_File(){
     return;
 }
 
+int main(){
+    int client_socket, server_socket;
+    struct sockaddr_in server_addr, client_addr;
+    socklen_t addr_size;
+
+    //create server socket
+    server_socket = socket(AF_INET, SOCK_STREAM, 0);
+    if (server_socket == -1){
+        perror("[-] Error in socket");
+        exit(EXIT_FAILURE);        
+    }
+    printf("[+] Server socket created successfully\n");
+
+    //set up the server and address structure
+    server_addr.sin_family = AF_INET;
+    server_addr.sin_addr.s_addr = INADDR_ANY;
+    server_addr.sin_port = htons(PORT);
+    
+    //bind the socket to the address and port number
+    if(bind(server_socket, (struct sockaddr *)&server_addr, sizeof(server_addr)) == -1) {
+        perror("[-] Bind error");
+        close(server_socket);
+        exit(EXIT_FAILURE);
+    }
+    printf("[+] Binding successfully\n")
+    
+
+}
 
 
