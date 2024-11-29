@@ -19,4 +19,21 @@ void send_file(FILE *fp, int server_socket){
     }
 }
 
+int main(){
+    int client_socket;
+    struct sockaddr_in server_addr;
 
+    //create client socket
+    client_socket = socket(AF_INET, SOCK_STREAM, 0);
+    if(client_socket == -1){
+        perror("[-] Socket error");
+        exit(EXIT_FAILURE);
+    }
+    printf("[+] Create socket successfully\n");
+
+    //set up the server address structure
+    server_addr.sin_family = AF_INET;
+    server_addr.sin_addr.s_addr = inet_addr(SERVER_IP);
+    server_addr.sin_port = htons(SERVER_PORT);
+
+}
