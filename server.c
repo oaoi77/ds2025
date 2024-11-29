@@ -12,13 +12,13 @@ void recv_file(int client_socket){
     int n;
     FILE *fp;
     char *fn = "message.txt";
-    char buffer[size];
+    char buffer[BUFFER_SIZE];
 
     fp = fopen(fn, "w");
     //loop until connection closed or error occur
     while (1) {
         //recv return the number of bytes read
-        n = recv(sockfd, buffer, BUFFER_SIZE, 0)
+        n = recv(client_socket, buffer, BUFFER_SIZE, 0)
         if (n<=0){
             break;
             return;
