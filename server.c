@@ -8,7 +8,7 @@
 
 //Function to receive file from client 
 //server receive the data from client and write to file
-void recv_File(){
+void recv_file(int client_socket){
     int n;
     FILE *fp;
     char *fn = "message.txt";
@@ -74,6 +74,8 @@ int main(){
     }
     printf("[+] Accepting client connection");
 
+    recv_file(client_socket);
+    close(server_socket);
 }
 
 
