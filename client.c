@@ -22,6 +22,8 @@ void send_file(FILE *fp, int server_socket){
 int main(){
     int client_socket;
     struct sockaddr_in server_addr;
+    FILE *fp;
+    char *filename = "send.txt";
 
     //create client socket
     client_socket = socket(AF_INET, SOCK_STREAM, 0);
@@ -36,4 +38,19 @@ int main(){
     server_addr.sin_addr.s_addr = inet_addr(SERVER_IP);
     server_addr.sin_port = htons(SERVER_PORT);
 
+    //connect to server
+    if(connect(client_socket, (struct sockaddr *)&server_addr, sizeof(server_addr)) == -1) {
+        perror("[-] Connect error");
+        close(client_socket);
+        exit(EXIT_FAILURE);
+    }
+    printf("[+] Connect successfully\n")
+
+    //read the file then send file data to server
+    fp = fopen(filename, "r");
+    if(fp == NULL){
+        perror("[-] Reading file failed");
+        close(client_socket);
+        exit(EXIT_VALUE);
+    }
 }
