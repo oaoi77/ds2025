@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <unistd.h>
 #include <arpa/inet.h>
 
 #define PORT 8080 
@@ -18,7 +19,7 @@ void recv_file(int client_socket){
     //loop until connection closed or error occur
     while (1) {
         //recv return the number of bytes read
-        n = recv(client_socket, buffer, BUFFER_SIZE, 0)
+        n = recv(client_socket, buffer, BUFFER_SIZE, 0);
         if (n<=0){
             break;
             return;
@@ -54,7 +55,7 @@ int main(){
         close(server_socket);
         exit(EXIT_FAILURE);
     }
-    printf("[+] Binding successfully\n")
+    printf("[+] Binding successfully\n");
 
     //listen request from client (incomming connection), not ovet 10 times attempt
     if(listen(server_socket, 10) == -1){
@@ -62,7 +63,7 @@ int main(){
         close(server_socket);
         exit(EXIT_FAILURE);
     }
-    printf("[+] Listening successfully");
+    printf("[+] Listening...\n");
 
     //establish the connection between server and client
     addr_size = sizeof(client_addr);
@@ -72,9 +73,11 @@ int main(){
         close(server_socket);
         exit(EXIT_FAILURE);
     }
-    printf("[+] Accepting client connection");
+    printf("[+] Accepting client connection\n");
 
+    //receive file and close socket connection
     recv_file(client_socket);
+    printf("[+] Received data from client\n");
     close(server_socket);
 }
 
