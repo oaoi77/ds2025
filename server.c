@@ -55,7 +55,24 @@ int main(){
         exit(EXIT_FAILURE);
     }
     printf("[+] Binding successfully\n")
-    
+
+    //listen request from client (incomming connection), not ovet 10 times attempt
+    if(listen(server_socket, 10) == -1){
+        perror("[-] Listen failed");
+        close(server_socket);
+        exit(EXIT_FAILURE);
+    }
+    printf("[+] Listening successfully");
+
+    //establish the connection between server and client
+    addr_size = sizeof(client_addr);
+    client_socket = accept(server_socket, (struct sockaddr *)&client_addr, &addr_size);
+    if(client_socket == -1){
+        perror("[-] Acception failed");
+        close(server_socket);
+        exit(EXIT_FAILURE);
+    }
+    printf("[+] Accepting client connection");
 
 }
 
