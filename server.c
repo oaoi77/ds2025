@@ -22,13 +22,12 @@ void recv_file(int client_socket){
         n = recv(client_socket, buffer, BUFFER_SIZE, 0);
         if (n<=0){
             break;
-            return;
         }
         //print the data received to message.txt
         fprintf(fp, "%s", buffer);
         bzero(buffer, BUFFER_SIZE); //Clear all data in buffer
     }
-    return;
+    fclose(fp);
 }
 
 int main(){
@@ -43,6 +42,14 @@ int main(){
         exit(EXIT_FAILURE);        
     }
     printf("[+] Server socket created successfully\n");
+
+    // Allow the server to reuse the address
+    int opt = 1;
+    if (setsockopt(server_socket, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt)) == -1) {
+        perror("setsockopt");
+        close(server_socket);
+        exit(EXIT_FAILURE);
+    }
 
     //set up the server and address structure
     server_addr.sin_family = AF_INET;
